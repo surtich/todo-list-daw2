@@ -1,26 +1,32 @@
 window.onload = function() {
     render();
-    
+
     document.getElementById('new-todo').onkeypress = function(event) {
         if (event.keyCode === 13) {
             addTodo(event.target.value);
+            event.target.value = "";
         }
     };
-    
+
     document.getElementById('clear-completed').onclick = function() {
         delChecked();
     };
-    
+
     document.getElementById('check-all').onclick = function() {
         var state = TODO_APP.itemsLeft() > 0;
         checkAll(state);
     };
-    
+
     window.onhashchange = function() {
-        console.log(window.location.hash)
-    }
-    
-    
+        var pattern = "#/";
+        var pos = window.location.hash.indexOf(pattern);
+        var filter = window.location.hash.substring(pos + pattern.length);
+
+        TODO_APP.filterTodos(filter);
+        render();
+    };
+
+
 };
 
 
@@ -41,7 +47,19 @@ function addTodo(text) {
     var text = document.createElement("input");
     text.type = 'text';
     text.value = todo.getText();
+    text.style.display = 'none';
     li.appendChild(text);
+    text.onkeyup = function(event) {
+        console.log(event.keyCode);
+    };
+    
+    var span = document.createElement("span");    
+    span.innerHTML = todo.getText();
+    span.ondblclick = function() {
+        text.style.display = 'inline';
+        span.style.display = 'none';
+    };
+    li.appendChild(span);
 
     var button = document.createElement("input");
     button.type = 'button';
@@ -102,4 +120,27 @@ function render() {
     } else {
         clearCompleted.style.display = 'none';
     }
+
+    var todos = document.getElementById('todos');
+    var i = 0;
+    for (; i < todos.children.length; i++) {
+        var li = todos.children[i];
+        var regExp = /^todo_([0-9]+)$/;
+        var match = li.id.match(regExp);
+        if (match && match.length > 0) {
+            var id = match[1];
+            var todo = TODO_APP.getTodo(id);
+            if (todo) {
+                if (todo.isVisible()) {
+                    li.style.display = 'block';
+                } else {
+                    li.style.display = 'none';
+                }
+            }
+        }
+
+
+    }
+
+
 }

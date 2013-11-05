@@ -124,7 +124,7 @@
       case "completed": 
         return this.getChecked();
       default: 
-        return this.visible = true;
+        return true;
     }
   }
   
