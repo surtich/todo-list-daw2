@@ -12,7 +12,7 @@ window.onload = function() {
         delChecked();
     };
 
-    document.getElementById('check-all').onclick = function() {
+    document.getElementById('toggle-all').onclick = function() {
         var state = TODO_APP.itemsLeft() > 0;
         checkAll(state);
     };
@@ -89,13 +89,13 @@ function addTodo(text) {
     button.type = 'button';
     button.onclick = function() {
         TODO_APP.delTodo(todo.getId());
-        document.getElementById('todos').removeChild(li);
+        document.getElementById('todo-list').removeChild(li);
         render();
     };
 
     li.appendChild(button);
 
-    document.getElementById('todos').appendChild(li);
+    document.getElementById('todo-list').appendChild(li);
     render();
 }
 
@@ -118,7 +118,7 @@ function cancelEdition(editor, viewer) {
 
 function delChecked() {
     TODO_APP.delChecked();
-    var todos = document.getElementById('todos');
+    var todos = document.getElementById('todo-list');
     var i = todos.children.length - 1;
     for (; i >= 0; i--) {
         var li = todos.children[i];
@@ -133,7 +133,7 @@ function delChecked() {
 
 function checkAll(state) {
     TODO_APP.checkAll(state);
-    var todos = document.getElementById('todos');
+    var todos = document.getElementById('todo-list');
     var i = todos.children.length - 1;
     for (; i >= 0; i--) {
         var li = todos.children[i];
@@ -147,11 +147,15 @@ function checkAll(state) {
 function render() {
     var itemsLeft = document.getElementById('items-left');
     var clearCompleted = document.getElementById('clear-completed');
+    var mainSection = document.getElementById('main');
+
 
     if (TODO_APP.countTodos() > 0) {
         itemsLeft.style.display = 'block';
+        mainSection.style.display = 'block';
         itemsLeft.innerHTML = TODO_APP.itemsLeft() + " item" + (TODO_APP.itemsLeft() !== 1 ? "s" : "") + " left";
     } else {
+        mainSection.style.display = 'none';
         itemsLeft.style.display = 'none';
     }
 
@@ -162,7 +166,7 @@ function render() {
         clearCompleted.style.display = 'none';
     }
 
-    var todos = document.getElementById('todos');
+    var todos = document.getElementById('todo-list');
     var i = 0;
     for (; i < todos.children.length; i++) {
         var li = todos.children[i];
