@@ -44,20 +44,44 @@ function addTodo(text) {
     };
     li.appendChild(check);
 
+
     var text = document.createElement("input");
     text.type = 'text';
     text.value = todo.getText();
+    text.mode = 'view';
     text.style.display = 'none';
-    li.appendChild(text);
+    
     text.onkeyup = function(event) {
-        console.log(event.keyCode);
+        if (event.keyCode === 13) {
+            modTodo(todo, text, span);
+        } else if (event.keyCode === 27) {
+            cancelEdition(text, span);
+        }
     };
+    
+    text.addEventListener('blur', function() {
+        if (text.mode === 'edit') {
+            text.mode = 'view';
+            modTodo(todo, text, span);
+        }
+        button.style.display = 'inline';
+        check.style.display = 'inline';
+    });
+    
+    li.appendChild(text);
     
     var span = document.createElement("span");    
     span.innerHTML = todo.getText();
-    span.ondblclick = function() {
+    span.ondblclick = function(event) {
+        text.mode = 'edit';
+        text.value = todo.getText();
         text.style.display = 'inline';
         span.style.display = 'none';
+        button.style.display = 'none';
+        check.style.display = 'none';
+        text.setSelectionRange(0, text.value.length);
+        //text.focus();
+        return false;
     };
     li.appendChild(span);
 
@@ -74,6 +98,23 @@ function addTodo(text) {
     document.getElementById('todos').appendChild(li);
     render();
 }
+
+function modTodo(todo, editor, viewer) {
+    var text = editor.value;
+    TODO_APP.modTodo(todo.getId(), text);
+    viewer.innerHTML = text;
+    editor.style.display = 'none';
+    viewer.style.display = 'inline';
+    editor.mode = 'view';
+}
+
+function cancelEdition(editor, viewer) {    
+    editor.style.display = 'none';
+    viewer.style.display = 'inline';
+    editor.mode = 'view';
+}
+
+
 
 function delChecked() {
     TODO_APP.delChecked();
@@ -138,9 +179,5 @@ function render() {
                 }
             }
         }
-
-
     }
-
-
 }
