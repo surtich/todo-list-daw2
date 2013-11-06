@@ -35,9 +35,11 @@ function addTodo(text) {
 
     var li = document.createElement("li");
     li.id = 'todo_' + todo.getId();
-
+    li.className = 'editing';
+    
     var check = document.createElement("input");
     check.type = 'checkbox';
+    check.className = 'toggle';
     check.onclick = function() {
         todo.setChecked(!todo.getChecked());
         render();
@@ -49,20 +51,21 @@ function addTodo(text) {
     text.type = 'text';
     text.value = todo.getText();
     text.mode = 'view';
+    text.className = "edit";
     text.style.display = 'none';
     
     text.onkeyup = function(event) {
         if (event.keyCode === 13) {
-            modTodo(todo, text, span);
+            modTodo(todo, text, label);
         } else if (event.keyCode === 27) {
-            cancelEdition(text, span);
+            cancelEdition(text, label);
         }
     };
     
     text.addEventListener('blur', function() {
         if (text.mode === 'edit') {
             text.mode = 'view';
-            modTodo(todo, text, span);
+            modTodo(todo, text, label);
         }
         button.style.display = 'inline';
         check.style.display = 'inline';
@@ -70,23 +73,23 @@ function addTodo(text) {
     
     li.appendChild(text);
     
-    var span = document.createElement("span");    
-    span.innerHTML = todo.getText();
-    span.ondblclick = function(event) {
+    var label = document.createElement("label");    
+    label.innerHTML = todo.getText();
+    label.ondblclick = function(event) {
         text.mode = 'edit';
         text.value = todo.getText();
         text.style.display = 'inline';
-        span.style.display = 'none';
+        label.style.display = 'none';
         button.style.display = 'none';
         check.style.display = 'none';
         text.setSelectionRange(0, text.value.length);
         //text.focus();
         return false;
     };
-    li.appendChild(span);
+    li.appendChild(label);
 
-    var button = document.createElement("input");
-    button.type = 'button';
+    var button = document.createElement("button");
+    button.className = 'destroy';
     button.onclick = function() {
         TODO_APP.delTodo(todo.getId());
         document.getElementById('todo-list').removeChild(li);
