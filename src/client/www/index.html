@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="js/todo.js"></script>
-    <script src="js/init.js"></script>
-    <meta name="description" content="Todo List" />
-    <meta charset='utf-8'/>
-    <link rel="shortcut icon" href="img/favicon.ico">
-    <title>Todo List</title>
-    <link rel="stylesheet" href="css/base.css">
-</head>
-<body>
-    <section id="todoapp">
-        <header id="header">
-            <h1>todos</h1>
-            <input id="new-todo" type="text" placeholder="What needs to be done?" autofocus/>            
-        </header>
-        <section id="main">
-            <input id="toggle-all" type="checkbox">
-            <label for="toggle-all">Mark all as complete</label>
-            <ol id="todo-list">
-            </ol>
-        </section>
-        <div id="items-left"></div>
-        <button id="clear-completed"></button>
-        <div id="filter">
-            <a href="#/">All</a>
-            <a href="#/active">Active</a>
-            <a href="#/completed">Completed</a>
-        </div>
-    </section>
-</body>
+	<head>
+		<script src="js/todo.js"></script>
+		<script src="js/init.js"></script>
+		<script src="js/todoUI.js"></script>
+		<meta name="description" content="Todo List" />
+		<meta charset='utf-8'/>
+		<link rel="shortcut icon" href="img/favicon.ico">
+		<title>Todo List</title>
+		<link rel="stylesheet" href="css/base.css">
+	</head>
+	<body>
+		<section id="todoapp">
+			<header id="header">
+				<h1>todos</h1>
+				<input id="new-todo" type="text" placeholder="What needs to be done?" autofocus/>            
+			</header>
+			<section id="main">
+				<input id="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ol id="todo-list">
+				</ol>
+			</section>
+			<footer id="footer">
+				<span id="todo-count"></span>
+				<ul id="filters">
+					<li><a id="filter-all" href="#/">All</a></li>
+					<li><a id="filter-active" href="#/active">Active</a></li>
+					<li><a id="filter-completed" href="#/completed">Completed</a></li>
+				</ul>
+				<button id="clear-completed"></button>
+			</footer>
+		</section>
+		<footer id="info">
+			<p>Double-click to edit a todo</p>
+			<p>Credits:
+				<span>Javier Pérez Arteaga</span>
+			</p>
+		</footer>
+	</body>
 </html>

@@ -1,190 +1,132 @@
-window.onload = function() {
-    render();
+(function() {
 
-    document.getElementById('new-todo').onkeypress = function(event) {
-        if (event.keyCode === 13) {
-            addTodo(event.target.value);
-            event.target.value = "";
-        }
-    };
+	var parent = {
+		render: render,
+		delTodoUI: delTodoUI
+	};
 
-    document.getElementById('clear-completed').onclick = function() {
-        delChecked();
-    };
+	var todosUI = [];
 
-    document.getElementById('toggle-all').onclick = function() {
-        var state = TODO_APP.itemsLeft() > 0;
-        checkAll(state);
-    };
+	window.onload = function() {
+		render(true);
+		applyFilter();
 
-    window.onhashchange = function() {
-        var pattern = "#/";
-        var pos = window.location.hash.indexOf(pattern);
-        var filter = window.location.hash.substring(pos + pattern.length);
+		document.getElementById('new-todo').onkeypress = function(event) {
+			if (event.keyCode === 13) {
+				addTodo(event.target.value);
+				event.target.value = "";
+			}
+		};
 
-        TODO_APP.filterTodos(filter);
-        render();
-    };
+		document.getElementById('clear-completed').onclick = function() {
+			delChecked();
+		};
 
+		document.getElementById('toggle-all').onclick = function() {
+			var state = TODO_APP.itemsLeft() > 0;
+			checkAll(state);
+		};
 
-};
+		window.onhashchange = applyFilter;
+	};
 
+	function addTodo(text) {
+		var todoUI = new TODO_APP.TodoUI(text, parent);
+		todosUI.push(todoUI);
+		document.getElementById('todo-list').appendChild(todoUI.container);
+		render(false);
+	}
 
-function addTodo(text) {
-    var todo = TODO_APP.addTodo(text);
+	function delTodoUI(todoUI) {
+		document.getElementById('todo-list').removeChild(todoUI.container);
+		var removed = false,
+				i = 0;
 
-    var li = document.createElement("li");
-    li.id = 'todo_' + todo.getId();
-    li.className = 'editing';
-    
-    var check = document.createElement("input");
-    check.type = 'checkbox';
-    check.className = 'toggle';
-    check.onclick = function() {
-        todo.setChecked(!todo.getChecked());
-        render();
-    };
-    li.appendChild(check);
+		while (!removed && i < todosUI.length) {
+			if (todosUI[i] === todoUI) {
+				todosUI.splice(i, 1);
+				removed = true;
+			} else {
+				i++;
+			}
+		}
 
+		render(false);
+	}
 
-    var text = document.createElement("input");
-    text.type = 'text';
-    text.value = todo.getText();
-    text.mode = 'view';
-    text.className = "edit";
-    text.style.display = 'none';
-    
-    text.onkeyup = function(event) {
-        if (event.keyCode === 13) {
-            modTodo(todo, text, label);
-        } else if (event.keyCode === 27) {
-            cancelEdition(text, label);
-        }
-    };
-    
-    text.addEventListener('blur', function() {
-        if (text.mode === 'edit') {
-            text.mode = 'view';
-            modTodo(todo, text, label);
-        }
-        button.style.display = 'inline';
-        check.style.display = 'inline';
-    });
-    
-    li.appendChild(text);
-    
-    var label = document.createElement("label");    
-    label.innerHTML = todo.getText();
-    label.ondblclick = function(event) {
-        text.mode = 'edit';
-        text.value = todo.getText();
-        text.style.display = 'inline';
-        label.style.display = 'none';
-        button.style.display = 'none';
-        check.style.display = 'none';
-        text.setSelectionRange(0, text.value.length);
-        //text.focus();
-        return false;
-    };
-    li.appendChild(label);
+	function delChecked() {
+		TODO_APP.delChecked();
+		var toDelete = [];
 
-    var button = document.createElement("button");
-    button.className = 'destroy';
-    button.onclick = function() {
-        TODO_APP.delTodo(todo.getId());
-        document.getElementById('todo-list').removeChild(li);
-        render();
-    };
+		todosUI.forEach(function(todoUI) {
+			if (todoUI.todo.isDeleted()) {
+				toDelete.push(todoUI);
+			}
+		});
 
-    li.appendChild(button);
+		toDelete.forEach(function(todoUI) {
+			delTodoUI(todoUI);
+		});
 
-    document.getElementById('todo-list').appendChild(li);
-    render();
-}
-
-function modTodo(todo, editor, viewer) {
-    var text = editor.value;
-    TODO_APP.modTodo(todo.getId(), text);
-    viewer.innerHTML = text;
-    editor.style.display = 'none';
-    viewer.style.display = 'inline';
-    editor.mode = 'view';
-}
-
-function cancelEdition(editor, viewer) {    
-    editor.style.display = 'none';
-    viewer.style.display = 'inline';
-    editor.mode = 'view';
-}
+		render(false);
+	}
 
 
+	function checkAll(state) {
+		TODO_APP.checkAll(state);
+		render(true);
+	}
 
-function delChecked() {
-    TODO_APP.delChecked();
-    var todos = document.getElementById('todo-list');
-    var i = todos.children.length - 1;
-    for (; i >= 0; i--) {
-        var li = todos.children[i];
-        var check = li.children[0];
-        if (check.checked) {
-            todos.removeChild(li);
-        }
-    }
-    render();
-}
+	function applyFilter() {
+		var pattern = "#/";
+		var pos = window.location.hash.indexOf(pattern);
+		var filter = window.location.hash.substring(pos + pattern.length);
 
+		TODO_APP.filterTodos(filter);
+		render(true);
+		renderLink(filter);
+	}
 
-function checkAll(state) {
-    TODO_APP.checkAll(state);
-    var todos = document.getElementById('todo-list');
-    var i = todos.children.length - 1;
-    for (; i >= 0; i--) {
-        var li = todos.children[i];
-        var check = li.children[0];
-        check.checked = state;
-    }
-    render();
-}
+	function render(renderChildren) {
+		var itemsLeft = document.getElementById('todo-count');
+		var clearCompleted = document.getElementById('clear-completed');
+		var mainSection = document.getElementById('main');
+		var footer = document.getElementById('footer');
 
 
-function render() {
-    var itemsLeft = document.getElementById('items-left');
-    var clearCompleted = document.getElementById('clear-completed');
-    var mainSection = document.getElementById('main');
+		if (TODO_APP.countTodos() > 0) {
+			footer.style.display = '';
+			mainSection.style.display = '';
+			itemsLeft.innerHTML = '<strong>' + TODO_APP.itemsLeft() + "</strong> item" + (TODO_APP.itemsLeft() !== 1 ? "s" : "") + " left";
+		} else {
+			mainSection.style.display = 'none';
+			footer.style.display = 'none';
+		}
+
+		if (TODO_APP.countTodos() - TODO_APP.itemsLeft() > 0) {
+			clearCompleted.style.display = '';
+			clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
+		} else {
+			clearCompleted.style.display = 'none';
+		}
+
+		if (renderChildren) {
+			todosUI.forEach(function(todoUI) {
+				todoUI.render();
+			});
+		}
+	}
+
+	function renderLink(filter) {
+		var links = document.getElementById('filters').getElementsByTagName('a');
+		for (var i = 0; i < links.length; i++) {
+			links[i].className = '';
+		}
+
+		var activeLink = document.getElementById('filter-' + filter) || document.getElementById('filter-all');
+		activeLink.className = 'selected';
+
+	}
+})();
 
 
-    if (TODO_APP.countTodos() > 0) {
-        itemsLeft.style.display = 'block';
-        mainSection.style.display = 'block';
-        itemsLeft.innerHTML = TODO_APP.itemsLeft() + " item" + (TODO_APP.itemsLeft() !== 1 ? "s" : "") + " left";
-    } else {
-        mainSection.style.display = 'none';
-        itemsLeft.style.display = 'none';
-    }
-
-    if (TODO_APP.countTodos() - TODO_APP.itemsLeft() > 0) {
-        clearCompleted.style.display = 'block';
-        clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
-    } else {
-        clearCompleted.style.display = 'none';
-    }
-
-    var todos = document.getElementById('todo-list');
-    var i = 0;
-    for (; i < todos.children.length; i++) {
-        var li = todos.children[i];
-        var regExp = /^todo_([0-9]+)$/;
-        var match = li.id.match(regExp);
-        if (match && match.length > 0) {
-            var id = match[1];
-            var todo = TODO_APP.getTodo(id);
-            if (todo) {
-                if (todo.isVisible()) {
-                    li.style.display = 'block';
-                } else {
-                    li.style.display = 'none';
-                }
-            }
-        }
-    }
-}
