@@ -42,7 +42,11 @@
 				text.mode = 'view';
 				modTodo(todo, text, label);
 			}
-			li.className = 'completed';//tocar aki
+			if (todo.getChecked()){
+				li.className = 'completed';
+			}else{
+				li.className = 'view';
+			}
 		});
 
 		var label = document.createElement("label");
