@@ -42,7 +42,7 @@
 				text.mode = 'view';
 				modTodo(todo, text, label);
 			}
-			li.className = 'view';
+			li.className = 'completed';//tocar aki
 		});
 
 		var label = document.createElement("label");
@@ -101,7 +101,6 @@
 		var text = editor.value;
 		TODO_APP.modTodo(todo.getId(), text);
 		viewer.innerHTML = text;
-		editor.mode = 'view';
 	}
 
 	function cancelEdition(editor, viewer) {
