@@ -108,6 +108,7 @@
 			clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
 		} else {
 			clearCompleted.style.display = 'none';
+			clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
 		}
 
 		if (renderChildren) {
