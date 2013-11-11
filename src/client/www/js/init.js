@@ -10,7 +10,6 @@
 	window.onload = function() {
 		render(true);
 		applyFilter();
-
 		document.getElementById('new-todo').onkeypress = function(event) {
 			if (event.keyCode === 13) {
 				addTodo(event.target.value);
@@ -31,10 +30,12 @@
 	};
 
 	function addTodo(text) {
-		var todoUI = new TODO_APP.TodoUI(text, parent);
-		todosUI.push(todoUI);
-		document.getElementById('todo-list').appendChild(todoUI.container);
-		render(false);
+		if(text !== ''){
+			var todoUI = new TODO_APP.TodoUI(text, parent);
+			todosUI.push(todoUI);
+			document.getElementById('todo-list').appendChild(todoUI.container);
+			render(false);
+		}
 	}
 
 	function delTodoUI(todoUI) {
@@ -108,6 +109,7 @@
 			clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
 		} else {
 			clearCompleted.style.display = 'none';
+			clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
 		}
 
 		if (renderChildren) {
