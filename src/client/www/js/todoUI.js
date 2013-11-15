@@ -42,6 +42,13 @@
 			}else{
 				li.className = 'view';
 			}
+			var texto = text.value;
+                        texto=texto.trim();
+                        if(texto === "" ){  
+                            TODO_APP.delTodo(todo.getId());
+                            parent.delTodoUI(that);
+                             that.render();
+                        }
 		});
 
 		var label = document.createElement("label");
