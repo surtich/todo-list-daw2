@@ -13,15 +13,35 @@
 		filter = "all";
 	}
 
-	function addTodo(text) {
-		var checked = false;
-		var creationDate = new Date();
+	function load(jsonTodos) {
+		reset();
+		var maxId = 0;
+		if (jsonTodos && Object.keys(jsonTodos).length > 0) {
+			for (var key in jsonTodos) {
+				var todo = jsonTodos[key];
+				if (maxId < Number(key)) {
+					maxId = Number(key);
+				}
+				
+				addTodo(todo.text, key, todo.state, new Date(todo.creationDate), todo.checkedDate && new Date(todo.checkedDate));
+			}
+			id = maxId + 1;
+		}
+	}
+
+	function addTodo(text, myId, state, creationDate, checkedDate) {
+		var checked = state === true;
+		if (myId === undefined) {
+			myId = id;
+		}
+		creationDate = creationDate || new Date();
+
 		var todo = {
 			getId: (function(myId) {
 				return function() {
 					return myId;
 				};
-			}(id)),
+			}(myId)),
 			getText: function() {
 				return text;
 			},
@@ -57,7 +77,15 @@
 				return false;
 			}
 		};
-		todos[id] = todo;
+
+
+		if (checkedDate) {
+			todo.checkedDate = function() {
+				return checkedDate;
+			};
+		}
+
+		todos[myId] = todo;
 		numTodos++;
 		id++;
 
@@ -153,18 +181,66 @@
 		filter = newFilter;
 	}
 
+	function toJSON() {
+		var jsonTodos = {};
+		for (var key in todos) {
+			var todo = todos[key];
+			jsonTodos[todo.getId()] = {
+				text: todo.getText(),
+				state: todo.getChecked(),
+				creationDate: todo.getCreationDate().getTime()
+			};
+			
+			if (todo.checkedDate) {
+				jsonTodos[todo.getId()].checkedDate = todo.checkedDate();
+			}
+		}
+		return jsonTodos;
+	}
+
+	function getTodos() {
+		return todos;
+	}
+
 	function compareTo(todo1, todo2) {
 		if (todo1.checkedDate && todo2.checkedDate) {
-			return todo1.checkedDate().getTime() - todo2.checkedDate().getTime();
+			if (todo1.checkedDate().getTime() !== todo2.checkedDate().getTime()) {
+				return todo1.checkedDate().getTime() - todo2.checkedDate().getTime();
+			} else {
+				return todo2.getCreationDate().getTime() - todo1.getCreationDate().getTime();
+			}
 		} else if (todo1.checkedDate) {
 			return todo1.checkedDate().getTime();
 		} else if (todo2.checkedDate) {
 			return -todo2.checkedDate().getTime();
 		} else {
-			return todo2.getCreationDate().getTime() - todo1.getCreationDate().getTime();
+			if (todo2.getCreationDate().getTime() !== todo1.getCreationDate().getTime()) {
+				return todo2.getCreationDate().getTime() - todo1.getCreationDate().getTime();
+			} else {
+				return todo1.getId() - todo2.getId();
+			}
 		}
 	}
 
+	function getSortedTodos() {
+		var sortedTodos = [];
+		for (var key in todos) {
+			var todo = todos[key];
+			for (var i = 0; i < sortedTodos.length; i++) {
+				var sortedTodo = sortedTodos[i];
+				if (compareTo(todo, sortedTodo) < 0) {
+					break;
+				}
+			}
+			if (i < sortedTodos.length) {
+				sortedTodos.splice(i, 0, todo);
+			} else {
+				sortedTodos.push(todo);
+			}
+
+		}
+		return sortedTodos;
+	}
 
 	if (!root.TODO_APP) {
 		root.TODO_APP = {};
@@ -182,7 +258,10 @@
 	root.TODO_APP.filterTodos = filterTodos;
 	root.TODO_APP.toString = toString;
 	root.TODO_APP.reset = reset;
+	root.TODO_APP.load = load;
+	root.TODO_APP.toJSON = toJSON;
+	root.TODO_APP.getTodos = getTodos;
+	root.TODO_APP.getSortedTodos = getSortedTodos;
 	root.TODO_APP.compareTo = compareTo;
-
 
 }).call(this);

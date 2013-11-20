@@ -26,16 +26,15 @@
 		root.TODO_APP.decoreFunctions(
 				[
 					'addTodo', 'delTodo', 'modTodo', 'checkTodo', 'checkAll', 'delChecked'
-				], alertDecorator,
+				], {post: alertDecorator},
 				[
 					[alerts, 'Todo added', 'alert-info'],
 					[alerts, 'Todo deleted', 'alert-warning'],
-					[alerts, 'Todo added', 'alert-info'],
+					[alerts, 'Todo updated', 'alert-info'],
 					[alerts, 'Todo checked/unchecked', 'alert-success'],
 					[alerts, 'All todos have changed their state', 'alert-success'],
-					[alerts, 'All todos have been deleted', 'alert-danger'],
+					[alerts, 'All todos have been deleted', 'alert-danger']
 				]);
 	});
 
 })(this);
-

@@ -106,7 +106,7 @@ Nota: Este apartado no puntuará si no se ha resuelto correctamente el apartado 
 
 ![apartado7](https://bitbucket.org/surtich/todo-list-daw2/downloads/apartado7.png "Los TODOS realizados siempre serán verdes")
 
-### 8) (1,0 puntos desarrollo) En el futuro, se quiere tener la capacidad de añadir otros tipos de TODO, con otros colores de fondo.
+### 8) (1,5 puntos desarrollo) En el futuro, se quiere tener la capacidad de añadir otros tipos de TODO, con otros colores de fondo.
 
 Está previsto que pueden ser varias decenas. Para permitir que esto se pueda hacer sin tener que modificar el código cada vez que se añada un tipo de TODO, lo que se hará será lo siguiente:
 
@@ -147,7 +147,7 @@ Nota: Aunque la imagen muestre estilos y colores, no se preocupe por ello y déj
 
 ### 12) (1,0 puntos desarrollo) Los mensajes mostrados, desaparecerán después de estar tres segundos en pantalla.
 
-### 13) (1,0 puntos desarrollo) En clase se detectó que se podían dejar los Todos con el texto en blanco. Otro error no corregido de la aplicación, es que se pueden dejar con el texto en blanco al modificarlos.
+### 13) (0,5 puntos desarrollo) En clase se detectó que se podían dejar los Todos con el texto en blanco. Otro error no corregido de la aplicación, es que se pueden dejar con el texto en blanco al modificarlos.
 Corrija este problema: Al modificar un Todo, si el texto está vacío o sólo tiene espacios en blanco, se eliminará el Todo.
 Nota: Este es el comportamiento previsto en TodoMVC.
 Si al modificar, el texto contiene blancos al principio o al final, se eliminarán (como hacemos al insertar).
@@ -164,19 +164,19 @@ Para todos los apartados: habrá dos diseños básicos; uno para dispositivos co
 
 Los siguientes son los cambios que deben suceder. Si no se especifica, se refieren a los dispositivos con pantalla pequeña (en la grande no deberían producirse cambios).
 
-### 13) (2,0 puntos diseño) Para ambos tipos de dispositivos, la caja de texto para mostrar los TODOs debe ser fluida y crecer y contraerse según sea la pantalla ocupando aproximadamente el 90% pero sin pasar de 500px.
+### 14) (2,0 puntos diseño) Para ambos tipos de dispositivos, la caja de texto para mostrar los TODOs debe ser fluida y crecer y contraerse según sea la pantalla ocupando aproximadamente el 90% pero sin pasar de 500px.
 
-### 14) (1,0 puntos diseño) El tamaño de los textos de los TODOS debe ser más pequeño, para adaptarse a la pantalla.
+### 15) (1,0 puntos diseño) El tamaño de los textos de los TODOS debe ser más pequeño, para adaptarse a la pantalla.
 
-### 15) (1,0 puntos diseño) El título grande que contiene el texto *todos*, debe desaparecer.
+### 16) (1,0 puntos diseño) El título grande que contiene el texto *todos*, debe desaparecer.
 
-### 16) (2,0 puntos diseño) Los enlaces a los filtros de TODOs deben sustituirse por las imágenes que se le facilitan y aparecer en la parte superior.
+### 17) (2,0 puntos diseño) Los enlaces a los filtros de TODOs deben sustituirse por las imágenes que se le facilitan y aparecer en la parte superior.
 
-### 17) (2,0 puntos diseño) Los enlaces con imágenes deben estar centrados y el espacio entre ellos estar equivalentemente distribuido para todo tipo de pantallas pequeñas.
+### 18) (2,0 puntos diseño) Los enlaces con imágenes deben estar centrados y el espacio entre ellos estar equivalentemente distribuido para todo tipo de pantallas pequeñas.
 
-### 18) (1,0 puntos diseño) Los textos *items left* y *clear completed* deben ser más grandes.
+### 19) (1,0 puntos diseño) Los textos *items left* y *clear completed* deben ser más grandes.
 
-### 19) (1,0 puntos diseño) La desaparición de los textos del apartado 12 se hará de forma progresiva creando un efecto *fan-out*.
+### 20) (1,0 puntos diseño) La desaparición de los textos del apartado 12 se hará de forma progresiva creando un efecto *fan-out*.
 
 
 Para entregar

@@ -7,6 +7,8 @@
 		<script src="js/todoUI.js"></script>
 		<script src="js/loggerDecorator.js"></script>
 		<script src="js/alertDecorator.js"></script>
+		<script src="js/localStorageDecorator.js"></script>
+		<script src="js/undoRedoDecorator.js"></script>
 
 		<meta name="description" content="Todo List" />
 		<meta charset='utf-8'/>
@@ -33,7 +35,7 @@
 				<ol id="todo-list">
 				</ol>
 			</section>
-			<footer id="footer">
+			<footer id="footer" style="display: none;">
 				<span id="todo-count"></span>
 				<ul id="filters">
 					<li><a id="filter-all" href="#/">All</a></li>
@@ -42,6 +44,14 @@
 				</ul>
 				<button id="clear-completed"></button>
 			</footer>
+		</section>
+		<section id="sort-section">
+			<input type="image" id="sort-asc" src="img/sort-asc.png" alt="sort"/>
+			<input type="image" id="sort-desc" src="img/sort-desc.png" alt="sort"/>
+		</section>
+		<section id="undo-redo-section">
+			<input type="image" id="undo" src="img/undo.png" alt="undo"/>
+			<input type="image"  id="redo" src="img/redo.png" alt="redo"/>
 		</section>
 		<section id="alerts">
 		</section>

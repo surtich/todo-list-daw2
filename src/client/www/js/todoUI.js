@@ -4,9 +4,8 @@
 		root.TODO_APP = {};
 	}
 
-	function TodoUI(text, parent) {
+	function TodoUI(todo, parent) {
 		var that = this;
-		var todo = root.TODO_APP.addTodo(text);
 
 		var li = document.createElement("li");
 
@@ -56,8 +55,7 @@
 		var button = document.createElement("button");
 		button.className = 'destroy';
 		button.onclick = function() {
-			root.TODO_APP.delTodo(todo.getId());
-			parent.delTodoUI(that);
+			delTodo();
 		};
 
 		div.appendChild(button);
@@ -81,14 +79,14 @@
 			} else {
 				delTodo();
 			}
+			this.parent.modTodoUI();
 		};
-
+		
 		function delTodo() {
 			li.className = 'deleted';
 			root.TODO_APP.delTodo(that.todo.getId());
 			parent.delTodoUI(that);
 		}
-
 	}
 
 	TodoUI.prototype.render = function() {
@@ -113,7 +111,6 @@
 			}
 		}
 	};
-
 
 	root.TODO_APP.TodoUI = TodoUI;
 

@@ -548,3 +548,28 @@ label[for='toggle-all'] {
 	}
 
 }
+
+
+
+#sort-section {
+	float: left;
+	padding-left: 10px;
+}
+
+#sort-desc, #redo {
+	padding-left: 15px;
+}
+
+#undo-redo-section {
+	float: right;
+	padding-right: 10px;
+}
+
+#alerts {
+	clear: both;
+}
+
+#undo:disabled, #redo:disabled, #sort-asc:disabled, #sort-desc:disabled {
+	opacity: 0.25;
+	cursor: default;
+}
