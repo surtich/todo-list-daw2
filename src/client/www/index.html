@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="js/decoratorService.js"></script>
 		<script src="js/todo.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/todoUI.js"></script>
+		<script src="js/loggerDecorator.js"></script>
+		<script src="js/alertDecorator.js"></script>
+
 		<meta name="description" content="Todo List" />
 		<meta charset='utf-8'/>
 		<link rel="shortcut icon" href="img/favicon.ico">
@@ -14,8 +18,15 @@
 		<section id="todoapp">
 			<header id="header">
 				<h1>todos</h1>
-				<input id="new-todo" type="text" placeholder="What needs to be done?" autofocus/>            
+				<ul id="filters-small">
+					<li><a id="filter-all" href="#/"><img src="img/all.png"/></a></li>
+					<li><a id="filter-active" href="#/active"><img src="img/active.png"/></a></li>
+					<li><a id="filter-completed" href="#/completed"><img src="img/checked.png"/></a></li>
+				</ul>
+
+				<input id="new-todo" type="text" placeholder="What needs to be done?" autofocus/>
 			</header>
+
 			<section id="main">
 				<input id="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
@@ -31,6 +42,8 @@
 				</ul>
 				<button id="clear-completed"></button>
 			</footer>
+		</section>
+		<section id="alerts">
 		</section>
 		<footer id="info">
 			<p>Double-click to edit a todo</p>

@@ -1,140 +1,140 @@
 (function() {
 
-    var parent = {
-        render: render,
-        delTodoUI: delTodoUI
-    };
+	var parent = {
+		delTodoUI: delTodoUI,
+		checkTodoUI: checkTodoUI
+	};
 
-    var todosUI = [];
+	var todosUI = [];
 
-    window.onload = function() {
-        render(true);
-        applyFilter();
-        document.getElementById('new-todo').onkeypress = function(event) {
-            if (event.keyCode === 13) {
-                var doClean = addTodo(event.target.value);
-                if (doClean) {
-                    event.target.value = "";
-                }
-            }
-        };
+	window.addEventListener ('load', function() {
+		render(true);
+		applyFilter();
 
-        document.getElementById('clear-completed').onclick = function() {
-            delChecked();
-        };
+		document.getElementById('new-todo').onkeypress = function(event) {
+			var text = event.target.value.trim();
+			if (event.keyCode === 13 && text !== "") {
+				addTodo(text);
+				event.target.value = "";
+			}
+		};
 
-        document.getElementById('toggle-all').onclick = function() {
-            var state = TODO_APP.itemsLeft() > 0;
-            checkAll(state);
-        };
+		document.getElementById('clear-completed').onclick = function() {
+			delChecked();
+		};
 
-        window.onhashchange = applyFilter;
-    };
+		document.getElementById('toggle-all').onclick = function() {
+			var state = TODO_APP.itemsLeft() > 0;
+			checkAll(state);
+		};
 
-    function addTodo(text) {
-        var task = text.trim();
-        if (task !== "")
-        {
-            var todoUI = new TODO_APP.TodoUI(task, parent);
-            todosUI.push(todoUI);
-            document.getElementById('todo-list').appendChild(todoUI.container);
-            render(false);
-            return true;
+		window.onhashchange = applyFilter;
+	});
 
-        }
-    }
+	function addTodo(text) {
+		var todoUI = new TODO_APP.TodoUI(text, parent);
+		todosUI.push(todoUI);
+		document.getElementById('todo-list').appendChild(todoUI.container);
+		render(false);
+	}
 
-    function delTodoUI(todoUI) {
-        document.getElementById('todo-list').removeChild(todoUI.container);
-        var removed = false,
-                i = 0;
+	function delTodoUI(todoUI) {
+		document.getElementById('todo-list').removeChild(todoUI.container);
+		var removed = false,
+				i = 0;
 
-        while (!removed && i < todosUI.length) {
-            if (todosUI[i] === todoUI) {
-                todosUI.splice(i, 1);
-                removed = true;
-            } else {
-                i++;
-            }
-        }
+		while (!removed && i < todosUI.length) {
+			if (todosUI[i] === todoUI) {
+				todosUI.splice(i, 1);
+				removed = true;
+			} else {
+				i++;
+			}
+		}
 
-        render(false);
-    }
+		render(false);
+	}
 
-    function delChecked() {
-        TODO_APP.delChecked();
-        var toDelete = [];
+	function checkTodoUI(todoUI) {
+		if (todoUI.todo.getChecked()) {
+			document.getElementById('todo-list').appendChild(todoUI.container);
+		}
+		render(false);
+	}
 
-        todosUI.forEach(function(todoUI) {
-            if (todoUI.todo.isDeleted()) {
-                toDelete.push(todoUI);
-            }
-        });
+	function delChecked() {
+		TODO_APP.delChecked();
+		var toDelete = [];
 
-        toDelete.forEach(function(todoUI) {
-            delTodoUI(todoUI);
-        });
+		todosUI.forEach(function(todoUI) {
+			if (todoUI.todo.isDeleted()) {
+				toDelete.push(todoUI);
+			}
+		});
 
-        render(false);
-    }
+		toDelete.forEach(function(todoUI) {
+			delTodoUI(todoUI);
+		});
 
-
-    function checkAll(state) {
-        TODO_APP.checkAll(state);
-        render(true);
-    }
-
-    function applyFilter() {
-        var pattern = "#/";
-        var pos = window.location.hash.indexOf(pattern);
-        var filter = window.location.hash.substring(pos + pattern.length);
-
-        TODO_APP.filterTodos(filter);
-        render(true);
-        renderLink(filter);
-    }
-
-    function render(renderChildren) {
-        var itemsLeft = document.getElementById('todo-count');
-        var clearCompleted = document.getElementById('clear-completed');
-        var mainSection = document.getElementById('main');
-        var footer = document.getElementById('footer');
+		render(false);
+	}
 
 
-        if (TODO_APP.countTodos() > 0) {
-            footer.style.display = '';
-            mainSection.style.display = '';
-            itemsLeft.innerHTML = '<strong>' + TODO_APP.itemsLeft() + "</strong> item" + (TODO_APP.itemsLeft() !== 1 ? "s" : "") + " left";
-        } else {
-            mainSection.style.display = 'none';
-            footer.style.display = 'none';
-        }
+	function checkAll(state) {
+		TODO_APP.checkAll(state);
+		render(true);
+	}
 
-        if (TODO_APP.countTodos() - TODO_APP.itemsLeft() > 0) {
-            clearCompleted.style.display = '';
-            clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
-        } else {
-            clearCompleted.style.display = 'none';
-            clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
-        }
+	function applyFilter() {
+		var pattern = "#/";
+		var pos = window.location.hash.indexOf(pattern);
+		var filter = window.location.hash.substring(pos + pattern.length);
 
-        if (renderChildren) {
-            todosUI.forEach(function(todoUI) {
-                todoUI.render();
-            });
-        }
-    }
+		TODO_APP.filterTodos(filter);
+		render(true);
+		renderLink(filter);
+	}
 
-    function renderLink(filter) {
-        var links = document.getElementById('filters').getElementsByTagName('a');
-        for (var i = 0; i < links.length; i++) {
-            links[i].className = '';
-        }
+	function render(renderChildren) {
+		var itemsLeft = document.getElementById('todo-count');
+		var clearCompleted = document.getElementById('clear-completed');
+		var mainSection = document.getElementById('main');
+		var footer = document.getElementById('footer');
 
-        var activeLink = document.getElementById('filter-' + filter) || document.getElementById('filter-all');
-        activeLink.className = 'selected';
 
-    }
+		if (TODO_APP.countTodos() > 0) {
+			footer.style.display = '';
+			mainSection.style.display = '';
+			itemsLeft.innerHTML = '<strong>' + TODO_APP.itemsLeft() + "</strong> item" + (TODO_APP.itemsLeft() !== 1 ? "s" : "") + " left";
+		} else {
+			mainSection.style.display = 'none';
+			footer.style.display = 'none';
+		}
+
+		if (TODO_APP.countTodos() - TODO_APP.itemsLeft() > 0) {
+			clearCompleted.style.display = '';
+			clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
+		} else {
+			clearCompleted.style.display = 'none';
+		}
+
+		if (renderChildren) {
+			todosUI.forEach(function(todoUI) {
+				todoUI.render();
+			});
+		}
+	}
+
+	function renderLink(filter) {
+		var links = document.getElementById('filters').getElementsByTagName('a');
+		for (var i = 0; i < links.length; i++) {
+			links[i].className = '';
+		}
+
+		var activeLink = document.getElementById('filter-' + filter) || document.getElementById('filter-all');
+		activeLink.className = 'selected';
+
+	}
 })();
 
 
