@@ -5,7 +5,7 @@
 	var numTodos = 0;
 	var id = 0;
 	var filter = "all";
-        
+
 	function reset() {
 		todos = {};
 		numTodos = 0;
@@ -15,16 +15,16 @@
 
 	function addTodo(text) {
 		var checked = false;
-                var creationDate = new Date();
+		var creationDate = new Date();
 		var todo = {
 			getId: (function(myId) {
 				return function() {
 					return myId;
 				};
 			}(id)),
-                        getCreationDate: function() {
-                            return creationDate;
-                        },
+			getCreationDate: function() {
+				return creationDate;
+			},
 			getText: function() {
 				return text;
 			},
@@ -35,17 +35,17 @@
 				return checked;
 			},
 			setChecked: function(myState) {
-                                var date = new Date();
+				var date = new Date();
 				if (myState !== true && myState !== false) {
 					throw "Bad state (only true or false are valid values)";
 				} else {
-                                        if (myState) {
-                                           this.checkedDate = function () {
-                                               return date;
-                                           };
-                                        } else {
-                                            delete this.checkedDate;
-                                        }
+					if (myState) {
+						this.checkedDate = function() {
+							return date;
+						};
+					} else {
+						delete this.checkedDate;
+					}
 					checked = myState;
 				}
 			},
@@ -149,18 +149,18 @@
 	function filterTodos(newFilter) {
 		filter = newFilter;
 	}
-        
-        function compareTo(todo1, todo2) {
-            if (todo1.checkedDate && todo2.checkedDate) {
-                return todo1.checkedDate().getTime() - todo2.checkedDate().getTime();
-            } else if (todo1.checkedDate) {
-                return todo1.checkedDate().getTime();
-            } else if (todo2.checkedDate) {
-                return -todo2.checkedDate().getTime();
-            } else {
-                return todo2.getCreationDate().getTime() - todo1.getCreationDate().getTime();
-            }
-        }
+
+	function compareTo(todo1, todo2) {
+		if (todo1.checkedDate && todo2.checkedDate) {
+			return todo1.checkedDate().getTime() - todo2.checkedDate().getTime();
+		} else if (todo1.checkedDate) {
+			return todo1.checkedDate().getTime();
+		} else if (todo2.checkedDate) {
+			return -todo2.checkedDate().getTime();
+		} else {
+			return todo2.getCreationDate().getTime() - todo1.getCreationDate().getTime();
+		}
+	}
 
 
 	root.TODO_APP = {
@@ -176,7 +176,7 @@
 		filterTodos: filterTodos,
 		toString: toString,
 		reset: reset,
-                compareTo: compareTo
+		compareTo: compareTo
 	};
 
 }).call(this);

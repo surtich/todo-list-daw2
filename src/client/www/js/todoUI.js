@@ -26,29 +26,16 @@
 
 		text.onkeyup = function(event) {
 			if (event.keyCode === 13) {
-				this.blur();
+				that.modTodo();
 			} else if (event.keyCode === 27) {
-				li.className = 'view';
-                                this.blur();
+				that.render();
 			}
 		};
 
 		text.addEventListener('blur', function() {
 			if (li.className === 'editing') {
-				modTodo(todo, text, label);
+				that.modTodo();
 			}
-			if (todo.getChecked()){
-				li.className = 'completed';
-			}else{
-				li.className = 'view';
-			}
-			var texto = text.value;
-                        texto=texto.trim();
-                        if(texto === "" ){  
-                            TODO_APP.delTodo(todo.getId());
-                            parent.delTodoUI(that);
-                             that.render();
-                        }
 		});
 
 		var label = document.createElement("label");
@@ -75,13 +62,16 @@
 
 		this.todo = todo;
 		this.container = li;
-		this.viewer = div;
 		this.checker = check;
-		this.editor = text;
-		this.remover = button;
 		this.parent = parent;
-		
+
 		this.render();
+
+		this.modTodo = function() {
+			TODO_APP.modTodo(this.todo.getId(), text.value);
+			label.innerHTML = text.value;
+			this.render();
+		};
 	}
 
 	TodoUI.prototype.render = function() {
@@ -100,13 +90,6 @@
 	};
 
 	TODO_APP.TodoUI = TodoUI;
-
-
-	function modTodo(todo, editor, viewer) {
-		var text = editor.value;
-		TODO_APP.modTodo(todo.getId(), text);
-		viewer.innerHTML = text;
-	}
 
 })();
 
