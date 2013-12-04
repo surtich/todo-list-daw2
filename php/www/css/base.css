@@ -14,17 +14,21 @@ body {
   padding: 0 0 60px;
 }
 
+#wrap > .container {
+  padding: 60px 15px 0;
+}
+
 /* Set the fixed height of the footer here */
-#footer {
+#nav-footer {
   height: 60px;
   background-color: #f5f5f5;
 }
 
-#footer > .container {
+#nav-footer > .container {
   padding-left: 15px;
   padding-right: 15px;
 }
 
-#footer > .container div{
+#nav-footer > .container div{
   margin-top: 10px;
 }

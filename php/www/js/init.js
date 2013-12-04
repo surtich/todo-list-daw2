@@ -150,6 +150,14 @@
 		} else {
 			clearCompleted.style.display = 'none';
 		}
+    
+    if (TODO_APP.itemsLeft() > 0) {
+      document.getElementById('toggle-all').children[0].className = 'glyphicon glyphicon-check';
+      document.getElementById('toggle-all').children[0].innerHTML = '  Mark all as complete';
+    } else {
+      document.getElementById('toggle-all').children[0].className = 'glyphicon glyphicon-unchecked';
+      document.getElementById('toggle-all').children[0].innerHTML = '  Mark all as uncomplete';
+    }
 
 		if (renderChildren) {
 			todosUI.forEach(function(todoUI) {
@@ -178,7 +186,9 @@
 	}
 
 	function init(sort, desc) {
-		var i;
+		var i,
+    todo;
+    
 		todosUI = [];
 		document.getElementById('todo-list').innerHTML = "";
 
@@ -190,12 +200,12 @@
 		}
 		if (sort && desc) {
 			for (i = todos.length - 1; i >=0 ; i--) {
-				var todo = todos[i];
+				todo = todos[i];
 				addTodoUI(todo);
 			}
 		} else {
 			for (i in todos) {
-				var todo = todos[i];
+				todo = todos[i];
 				addTodoUI(todo);
 			}
 		}
