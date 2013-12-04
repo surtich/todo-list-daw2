@@ -10,7 +10,11 @@
 		var li = document.createElement("li");
 
 		var div = document.createElement("div");
-		div.className = 'view';
+		div.className = 'view row';
+
+
+		var divCheck = document.createElement("div");
+		divCheck.className = 'col-md-1';
 
 		var check = document.createElement("input");
 		check.type = 'checkbox';
@@ -20,13 +24,13 @@
 			that.render();
 			that.parent.checkTodoUI(that);
 		};
-		div.appendChild(check);
+		divCheck.appendChild(check);    
+    div.appendChild(divCheck);
 
-
-		var text = document.createElement("input");
+    var text = document.createElement("input");
 		text.type = 'text';
 		text.value = todo.getText();
-		text.className = "edit";
+		text.className = "edit form-control";
 
 		text.onkeyup = function(event) {
 			if (event.keyCode === 13) {
@@ -42,6 +46,10 @@
 			}
 		});
 
+    
+    var divLabel = document.createElement("div");
+    divLabel.className = 'col-md-10';
+		
 		var label = document.createElement("label");
 		label.innerHTML = todo.getPurifiedText();
 		label.ondblclick = function(event) {
@@ -50,15 +58,19 @@
 			text.focus();
 			return false;
 		};
-		div.appendChild(label);
+    divLabel.appendChild(label);
+		div.appendChild(divLabel);
+    
+    var divButton = document.createElement("div");
+		divButton.className = 'col-md-1';
 
 		var button = document.createElement("button");
 		button.className = 'destroy';
 		button.onclick = function() {
 			delTodo();
 		};
-
-		div.appendChild(button);
+    divButton.appendChild(button);
+    div.appendChild(divButton);
 
 		li.appendChild(div);
 		li.appendChild(text);
