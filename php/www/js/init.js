@@ -32,15 +32,21 @@
     };
 
     document.getElementById('undo').onclick = function(e) {
+      e.preventDefault();
+      if (this.parentNode.className === 'disabled') {
+        return;
+      }
       TODO_APP.load(TODO_APP.undo());
       init();
-      e.preventDefault();
     };
 
     document.getElementById('redo').onclick = function(e) {
+      e.preventDefault();
+      if (this.parentNode.className === 'disabled') {
+        return;
+      }
       TODO_APP.load(TODO_APP.redo());
       init();
-      e.preventDefault();
     };
 
     document.getElementById('sort-asc').onclick = function(e) {
@@ -139,9 +145,18 @@
     var mainSection = document.getElementById('main');
     var footer = document.getElementById('footer');
 
-    document.getElementById('undo').disabled = !TODO_APP.canUndo();
-    document.getElementById('redo').disabled = !TODO_APP.canRedo();
-
+    if (TODO_APP.canUndo()) {
+      document.getElementById('undo').parentNode.className = '';
+    } else {
+      document.getElementById('undo').parentNode.className = 'disabled';
+    }
+    
+    if (TODO_APP.canRedo()) {
+      document.getElementById('redo').parentNode.className = '';
+    } else {
+      document.getElementById('redo').parentNode.className = 'disabled';
+    }
+    
     if (TODO_APP.countTodos() < 2) {
       document.getElementById('sort-asc').parentNode.className = 'disabled';
       document.getElementById('sort-desc').parentNode.className = 'disabled';

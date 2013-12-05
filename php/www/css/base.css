@@ -48,30 +48,43 @@ body {
 }
 
 #todo-list li.view label {
-        color: #3a87ad;
-        background-color: #d9edf7;
-        border-color: #bce8f1;
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
 }
 
 #todo-list li.completed label {
-        color: #468847;
-        background-color: #dff0d8;
-        border-color: #d6e9c6;
-        text-decoration: line-through;
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    text-decoration: line-through;
 }
 
 #todo-list li.important label {
-        color: #b94a48;
-        background-color: #f2dede;
-        border-color: #ebccd1;
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #ebccd1;
 }
 
 #todo-list li.warning label {
-        color: #c09853;
-        background-color: #fcf8e3;
-        border-color: #faebcc;
+    color: #c09853;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
 }
 
 #todo-list li label {
     vertical-align: middle;
+}
+
+.alert-visible {
+    opacity: 1;
+    -webkit-transition: opacity 4s linear;
+    -moz-transition: opacity 4s linear;
+    -o-transition: opacity 4s linear;
+    -ms-transition: opacity 4s linear;
+    transition: opacity 4s linear;
+}
+
+.alert-hidden {
+    opacity: 0;
 }

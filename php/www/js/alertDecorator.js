@@ -8,7 +8,7 @@
 		var alerts = config[0];
 		var alert = document.createElement("div");
 		alert.innerHTML = config[1];
-		alert.className = 'alert ' + config[2];
+		alert.className = 'alert alert-visible ' + config[2];
 		alerts.insertBefore(alert, alerts.children[0]);
 		setTimeout (function () {
 			alert.style.opacity = 0;
