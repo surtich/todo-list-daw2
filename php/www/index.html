@@ -26,17 +26,18 @@
           </div>
           <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
               <li class="dropdown">
-
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">View <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="disabled"><a href="#" id="sort-asc"><span class="glyphicon glyphicon-sort-by-attributes"></span> Order ascendent</a></li>
+                  <li class="disabled"><a href="#" id="sort-desc"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span> Order descendent</a></li>                  
+                </ul>
+              </li>
+              <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Edit <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#"><span class="glyphicon glyphicon-sort-by-attributes"></span> Order ascendent</a></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span> Order descendent</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-arrow-left"></span> Undo</a></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-arrow-right"></span> Redo</a></li>
+                  <li><a href="#" id="undo"><span class="glyphicon glyphicon-arrow-left"></span> Undo</a></li>
+                  <li><a href="#" id="redo"><span class="glyphicon glyphicon-arrow-right"></span> Redo</a></li>
                 </ul>
               </li>
 
@@ -60,7 +61,7 @@
             </h3>
           </div>
           <div class="panel-body">
-            <ol id="todo-list" class="list-unstyled">
+            <ol id="todo-list" class="list-unstyled list-group">
             </ol>
           </div>
           <div id="footer" class="panel-footer" style="display: none;">
@@ -82,27 +83,9 @@
           </div>
         </div>
       </div>
-
-      <section id="todoapp">
-
-        <section >
-
-
-        </section>
-        <footer  >
-
-        </footer>
-      </section>
-      <section id="sort-section">
-        <input type="image" id="sort-asc" src="img/sort-asc.png" alt="sort"/>
-        <input type="image" id="sort-desc" src="img/sort-desc.png" alt="sort"/>
-      </section>
-      <section id="undo-redo-section">
-        <input type="image" id="undo" src="img/undo.png" alt="undo"/>
-        <input type="image"  id="redo" src="img/redo.png" alt="redo"/>
-      </section>
-      <section id="alerts">
-      </section>
+      
+      <div id="alerts" class="col-md-8 col-md-offset-2">
+      </div>
     </div> 
 
     <div id="nav-footer">

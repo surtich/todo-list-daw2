@@ -8,17 +8,17 @@
 		var that = this;
 
 		var li = document.createElement("li");
+    li.className = 'list-group-item';
 
 		var div = document.createElement("div");
-		div.className = 'view row';
-
+		div.className = 'row';
 
 		var divCheck = document.createElement("div");
 		divCheck.className = 'col-md-1';
 
-		var check = document.createElement("input");
-		check.type = 'checkbox';
-		check.className = 'toggle';
+		var check = document.createElement("button");
+		check.type = 'button';
+		check.className = 'view btn btn-default';
 		check.onclick = function() {
 			root.TODO_APP.checkTodo(todo.getId(), !todo.getChecked());
 			that.render();
@@ -41,31 +41,34 @@
 		};
 
 		text.addEventListener('blur', function() {
-			if (li.className === 'editing') {
+			if (li.className === 'editing list-group-item') {
 				that.modTodo();
 			}
 		});
-
+    
     
     var divLabel = document.createElement("div");
     divLabel.className = 'col-md-10';
 		
 		var label = document.createElement("label");
 		label.innerHTML = todo.getPurifiedText();
+    label.className = 'view';
 		label.ondblclick = function(event) {
 			text.value = todo.getText();
-			li.className = 'editing';
+			li.className = 'editing list-group-item';
 			text.focus();
 			return false;
 		};
     divLabel.appendChild(label);
+    divLabel.appendChild(text);
 		div.appendChild(divLabel);
     
     var divButton = document.createElement("div");
 		divButton.className = 'col-md-1';
 
 		var button = document.createElement("button");
-		button.className = 'destroy';
+		button.className = 'view btn btn-default';
+    button.innerHTML = '<span class="glyphicon glyphicon-trash"></span>';
 		button.onclick = function() {
 			delTodo();
 		};
@@ -73,7 +76,6 @@
     div.appendChild(divButton);
 
 		li.appendChild(div);
-		li.appendChild(text);
 
 		this.todo = todo;
 		this.container = li;
@@ -95,7 +97,7 @@
 		};
 		
 		function delTodo() {
-			li.className = 'deleted';
+			li.className = 'deleted list-group-item';
 			root.TODO_APP.delTodo(that.todo.getId());
 			parent.delTodoUI(that);
 		}
@@ -109,17 +111,17 @@
 		}
 
 		if (this.todo.getChecked()) {
-			this.container.className = 'completed';
-			this.checker.checked = true;
+			this.container.className = 'completed  list-group-item';
+			this.checker.innerHTML = '<span class="glyphicon glyphicon-check"></span>';
 		} else {
+      this.checker.innerHTML = '<span class="glyphicon glyphicon-unchecked"></span>';
 			var regExp = /^@@([^@]+)@@/;
 			var match = this.todo.getText().match(regExp);
 
 			if (match) {
-				this.container.className = match[1];
+				this.container.className = match[1] + " list-group-item";
 			} else {
-				this.container.className = 'view';
-				this.checker.checked = false;
+				this.container.className = 'view list-group-item';
 			}
 		}
 	};
