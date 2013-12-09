@@ -75,12 +75,3 @@ body {
 #todo-list li label {
   vertical-align: middle;
 }
-
-.alert-visible {
-  opacity: 1;
-  -webkit-transition: opacity 4s linear;
-  -moz-transition: opacity 4s linear;
-  -o-transition: opacity 4s linear;
-  -ms-transition: opacity 4s linear;
-  transition: opacity 4s linear;
-}
