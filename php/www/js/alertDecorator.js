@@ -6,16 +6,11 @@
 
 	function alertDecorator(config, params, result) {
 		var alerts = config[0];
-		var alert = document.createElement("div");
-		alert.innerHTML = config[1];
-		alert.className = 'alert ' + config[2];
-		alerts.insertBefore(alert, alerts.children[0]);
-		setTimeout (function () {
-			alert.style.opacity = 0;
-		}, 2000);
-		setTimeout (function () {
-			alerts.removeChild(alert);
-		}, 4000);
+		var alert = $('<div>').html(config[1]).addClass('alert ' + config[2]).fadeOut(4000, function() {
+      debugger
+      $(this).remove();
+    });
+		alerts.insertBefore(alert[0], alerts.children[0]);
 	}
 
 	window.addEventListener('load', function() {

@@ -8,11 +8,11 @@
 
   var todosUI = [];
 
-  window.addEventListener('load', function() {
+  $(document).ready(function() {
     loadLocalStorage();
     applyFilter();
 
-    document.getElementById('new-todo').onkeypress = function(event) {
+    $('#new-todo').keypress(function(event) {
       var text = event.target.value.trim();
       if (event.keyCode === 13 && text !== "") {
         var todo = TODO_APP.addTodo(text);
@@ -20,54 +20,54 @@
         event.target.value = "";
         render(false);
       }
-    };
+    });
 
-    document.getElementById('clear-completed').onclick = function() {
+    $('#clear-completed').click(function() {
       delChecked();
-    };
+    });
 
-    document.getElementById('toggle-all').onclick = function() {
+    $('#toggle-all').click(function() {
       var state = TODO_APP.itemsLeft() > 0;
       checkAll(state);
-    };
+    });
 
-    document.getElementById('undo').onclick = function(e) {
+    $('#undo').click(function(e) {
       TODO_APP.load(TODO_APP.undo());
       init();
       e.preventDefault();
-    };
+    });
 
-    document.getElementById('redo').onclick = function(e) {
+    $('#redo').click(function(e) {
       TODO_APP.load(TODO_APP.redo());
       init();
       e.preventDefault();
-    };
+    });
 
-    document.getElementById('sort-asc').onclick = function(e) {
+    $('#sort-asc').click(function(e) {
       e.preventDefault();
       if (this.parentNode.className === 'disabled') {
         return;
       }
       init(true);
       this.parentNode.className = 'disabled';      
-    };
+    });
 
-    document.getElementById('sort-desc').onclick = function(e) {
+    $('#sort-desc').click(function(e) {
       e.preventDefault();
       if (this.parentNode.className === 'disabled') {
         return;
       }
       init(true, true);
       this.parentNode.className = 'disabled';
-    };
+    });
 
-    window.onhashchange = applyFilter;
+    $(window).bind('hashchange', applyFilter);
   });
 
   function addTodoUI(todo) {
     var todoUI = new TODO_APP.TodoUI(todo, parent);
     todosUI.push(todoUI);
-    document.getElementById('todo-list').appendChild(todoUI.container);
+    $('#todo-list').append(todoUI.container);
   }
 
   function delTodoUI(todoUI) {
@@ -134,16 +134,16 @@
   }
   
   function render(renderChildren) {
-    var itemsLeft = document.getElementById('todo-count');
-    var clearCompleted = document.getElementById('clear-completed');
-    var mainSection = document.getElementById('main');
-    var footer = document.getElementById('footer');
+    var itemsLeft = $('#todo-count');
+    var clearCompleted = $('#clear-completed');
+    var mainSection = $('#main');
+    var footer = $('#footer');
 
-    document.getElementById('undo').disabled = !TODO_APP.canUndo();
-    document.getElementById('redo').disabled = !TODO_APP.canRedo();
+    $('#undo').prop('disabled', !TODO_APP.canUndo());
+    $('#redo').prop('disabled', !TODO_APP.canRedo());
 
     if (TODO_APP.countTodos() < 2) {
-      document.getElementById('sort-asc').parentNode.className = 'disabled';
+      $('#sort-asc').parent()[0].className = 'disabled';
       document.getElementById('sort-desc').parentNode.className = 'disabled';
     } else {
       document.getElementById('sort-asc').parentNode.className = '';
@@ -151,19 +151,19 @@
     }
 
     if (TODO_APP.countTodos() > 0) {
-      footer.style.display = '';
-      mainSection.style.display = '';
-      itemsLeft.innerHTML = '<strong>' + TODO_APP.itemsLeft() + "</strong> item" + (TODO_APP.itemsLeft() !== 1 ? "s" : "") + " left";
+      footer.css('display', '');
+      mainSection.css('display', '');
+      itemsLeft.html('<strong>' + TODO_APP.itemsLeft() + "</strong> item" + (TODO_APP.itemsLeft() !== 1 ? "s" : "") + " left");
     } else {
-      mainSection.style.display = 'none';
-      footer.style.display = 'none';
+      mainSection.css('display', 'none');
+      footer.css('display', 'none');
     }
 
     if (TODO_APP.countTodos() - TODO_APP.itemsLeft() > 0) {
-      clearCompleted.style.display = '';
-      clearCompleted.innerHTML = "Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")";
+      clearCompleted.css('display', '');
+      clearCompleted.html("Clear completed (" + (TODO_APP.countTodos() - TODO_APP.itemsLeft()) + ")");
     } else {
-      clearCompleted.style.display = 'none';
+      clearCompleted.css('display', 'none');
     }
     
     if (TODO_APP.itemsLeft() > 0) {
@@ -228,5 +228,3 @@
     render(true);
   }
 })();
-
-

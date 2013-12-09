@@ -7,88 +7,68 @@
 	function TodoUI(todo, parent) {
 		var that = this;
 
-		var li = document.createElement("li");
-    li.className = 'list-group-item';
+		var li = $('<li class="list-group-item">');
 
-		var div = document.createElement("div");
-		div.className = 'row';
+		var div = $('<div class="row">');
 
-		var divCheck = document.createElement("div");
-		divCheck.className = 'col-md-1';
+		var divCheck = $('<div class="col-md-1">');
 
-		var check = document.createElement("button");
-		check.type = 'button';
-		check.className = 'view btn btn-default';
-		check.onclick = function() {
-			root.TODO_APP.checkTodo(todo.getId(), !todo.getChecked());
+		var check = $('<button class="view btn btn-default">').click(function() {
+      root.TODO_APP.checkTodo(todo.getId(), !todo.getChecked());
 			that.render();
 			that.parent.checkTodoUI(that);
-		};
-		divCheck.appendChild(check);    
-    div.appendChild(divCheck);
+    });
+    
+		divCheck.append(check);    
+    div.append(divCheck);
 
-    var text = document.createElement("input");
-		text.type = 'text';
-		text.value = todo.getText();
-		text.className = "edit form-control";
-
-		text.onkeyup = function(event) {
+    var text = $('<input type="text" class="edit form-control">').val(todo.getText()).keyup (function(event) {
 			if (event.keyCode === 13) {
 				that.modTodo();
 			} else if (event.keyCode === 27) {
 				that.render();
 			}
-		};
-
-		text.addEventListener('blur', function() {
-			if (li.className === 'editing list-group-item') {
+		}).bind('blur', function() {
+			if (li.hasClass('editing')) {
 				that.modTodo();
 			}
 		});
     
-    
-    var divLabel = document.createElement("div");
-    divLabel.className = 'col-md-10';
+    var divLabel = $('<div class="col-md-10">');
 		
-		var label = document.createElement("label");
-		label.innerHTML = todo.getPurifiedText();
-    label.className = 'view';
-		label.ondblclick = function(event) {
+		var label = $('<label class="view">').html(todo.getPurifiedText()).dblclick( function(event) {
 			text.value = todo.getText();
-			li.className = 'editing list-group-item';
+			li.addClass('editing').removeClass('view');
 			text.focus();
 			return false;
-		};
-    divLabel.appendChild(label);
-    divLabel.appendChild(text);
-		div.appendChild(divLabel);
+		}).appendTo(divLabel);
     
-    var divButton = document.createElement("div");
-		divButton.className = 'col-md-1';
+    divLabel.append(text);
+		div.append(divLabel);
+    
+    var divButton = $('<div class="col-md-1">');
 
-		var button = document.createElement("button");
-		button.className = 'view btn btn-default';
-    button.innerHTML = '<span class="glyphicon glyphicon-trash"></span>';
-		button.onclick = function() {
+		var button = $('<button class="view btn btn-default">').html('<span class="glyphicon glyphicon-trash"></span>')
+    .click(function() {
 			delTodo();
-		};
-    divButton.appendChild(button);
-    div.appendChild(divButton);
-
-		li.appendChild(div);
-
+		});
+    divButton.append(button);
+    div.append(divButton);
+    
+		li.append(div);
+    
 		this.todo = todo;
-		this.container = li;
-		this.checker = check;
+		this.container = li[0];
+		this.checker = check[0];
 		this.parent = parent;
 
 		this.render();
 
 		this.modTodo = function() {
-			var task = text.value.trim();
+			var task = text.val().trim();
 			if (task !== '') {
 				root.TODO_APP.modTodo(this.todo.getId(), task);
-				label.innerHTML = this.todo.getPurifiedText();
+				label.html(this.todo.getPurifiedText());
 				that.render();
 			} else {
 				delTodo();
@@ -97,7 +77,7 @@
 		};
 		
 		function delTodo() {
-			li.className = 'deleted list-group-item';
+			li.toggleClass('deleted', false);
 			root.TODO_APP.delTodo(that.todo.getId());
 			parent.delTodoUI(that);
 		}
@@ -105,16 +85,16 @@
 
 	TodoUI.prototype.render = function() {
 		if (this.todo.isVisible()) {
-			this.container.style.display = '';
+			$(this.container).css('display', '');
 		} else {
-			this.container.style.display = 'none';
+			$(this.container).css('display', 'none');
 		}
 
 		if (this.todo.getChecked()) {
-			this.container.className = 'completed  list-group-item';
-			this.checker.innerHTML = '<span class="glyphicon glyphicon-check"></span>';
+			this.container.className = 'completed list-group-item';
+			$(this.checker).html('<span class="glyphicon glyphicon-check"></span>');
 		} else {
-      this.checker.innerHTML = '<span class="glyphicon glyphicon-unchecked"></span>';
+      $(this.checker).html('<span class="glyphicon glyphicon-unchecked"></span>');
 			var regExp = /^@@([^@]+)@@/;
 			var match = this.todo.getText().match(regExp);
 
