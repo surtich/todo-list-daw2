@@ -1,0 +1,66 @@
+<div>
+	<div id="wrap">
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Todos App</a>
+				</div>
+				
+			</div>
+		</div>
+		<div class="container">
+			<div class="well">          
+				<input id="new-todo" data-id="new-todo" type="text" placeholder="What needs to be done?" class="form-control"/>
+			</div>
+			<div class="panel panel-default" id="main" data-jq-toggle="hasTodos">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<button type="button" id="toggle-all"  data-id="toggle-all" data-jq-toggle="hasTodos" class="btn btn-default btn-lg">
+							<span class="glyphicon glyphicon-check"> Mark all as complete</span>
+						</button>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<ol id="todo-list" data-id="todo-list" class="list-unstyled list-group">
+					</ol>
+				</div>
+				<div id="footer" data-id="footer" class="panel-footer">
+					<div class="row">
+						<div class="col-md-2">
+							<span id="todo-count"><strong data-jq-text="remaining.count"></strong> <span data-jq-text="remaining.text"></span></span>
+						</div>
+						<div class="col-md-8">
+							<ul id="filters" class="list-inline text-center">
+								<li><a id="filter-all" href="#;filter=all">All</a></li>
+								<li><a id="filter-active" href="#;filter=active">Active</a></li>
+								<li><a id="filter-completed" href="#;filter=completed">Completed</a></li>
+							</ul>
+						</div>
+						<div class="col-md-2">
+							<button id="clear-completed" data-id="clear-completed" data-jq-text="completed" data-jq-toggle="hasRemainings" type="button" class="btn btn-default"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="alerts" class="col-md-8 col-md-offset-2">
+		</div>
+    </div> 
+
+    <div id="nav-footer">
+		<div class="container">
+			<div class="container">
+				<span>Double-click to edit a todo</span>
+				<span class="navbar-right">Credits: Javier Pérez Arteaga</span>
+			</div>
+		</div>
+    </div>
+
+</div>

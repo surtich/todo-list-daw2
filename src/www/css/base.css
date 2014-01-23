@@ -75,3 +75,8 @@ body {
 #todo-list li label {
   vertical-align: middle;
 }
+
+
+#filters li a.selected {
+	font-weight: bold;
+}
