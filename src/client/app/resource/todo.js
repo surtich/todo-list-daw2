@@ -45,8 +45,7 @@ iris.resource(function(self) {
 			console.log("Todo deleted");
 			delete todos[id];
 			callback(data);
-		});
-		delete todos[todos[id]];
+		});		
 	};
 
 	self.toggle = function(id, callback) {

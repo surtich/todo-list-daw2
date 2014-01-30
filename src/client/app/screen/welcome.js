@@ -15,7 +15,7 @@ iris.screen(function(self) {
 		for (; i >= 0; i--) {
 			self.uis[i].destroyUI();
 		}
-		uis = [];
+    
 		for (var id in todos) {
 			createTodo(id);
 		}
