@@ -3,7 +3,7 @@ var todoDAO = require('../dao/todo'),
 		check = require('../util/validator').check,
 		ObjectID = require('mongodb').ObjectID;
 
-function addTodo(text, callback) {
+function addTodo(text, user, callback) {
 
 	try {
 		check(text, 'Todo text').notEmpty();
@@ -16,6 +16,7 @@ function addTodo(text, callback) {
 	todoDAO.save({
 		text: text,
 		completed: false,
+    user: user,
 		creationDate: now,
 		modifiedDate: now
 	}, function(err, todo) {
@@ -24,7 +25,7 @@ function addTodo(text, callback) {
 }
 
 
-function getTodo(todoId, callback) {
+function getTodo(todoId, user, callback) {
 
 	try {
 		check(todoId).ObjectID();
@@ -32,7 +33,7 @@ function getTodo(todoId, callback) {
 		return callback(err, null);
 	}
 	
-	todoDAO.get(todoId, function(err, todo) {
+	todoDAO.get(todoId, user, function(err, todo) {
 		if (err) {
 			return callback(err);
 		}
@@ -49,7 +50,7 @@ function getTodo(todoId, callback) {
 }
 
 
-function delTodo(todoId, callback) {
+function delTodo(todoId, user, callback) {
 
 	try {
 		check(todoId).ObjectID();
@@ -57,7 +58,7 @@ function delTodo(todoId, callback) {
 		return callback(err, null);
 	}
 	
-	todoDAO.removeOne(todoId, function(err, result) {
+	todoDAO.removeOne(todoId, user, function(err, result) {
 		if (err) {
 			return callback(err);
 		}
@@ -74,7 +75,7 @@ function delTodo(todoId, callback) {
 }
 
 
-function updateOne(todoId, update, callback) {
+function updateOne(todoId, user, update,callback) {
 	try {
 		check(todoId).ObjectID();
 	} catch (err) {
@@ -83,7 +84,7 @@ function updateOne(todoId, update, callback) {
 	
 	update.modifiedDate = new Date();
 	
-	todoDAO.updateOne(todoId, update, function(err, todoSaved) {
+	todoDAO.updateOne(todoId, user, update, function(err, todoSaved) {
 		if (err) {
 			return callback(err);
 		}
@@ -109,7 +110,7 @@ function update(query, update, callback) {
 	});
 }
 
-function modTodo(todoId, newText, callback) {
+function modTodo(todoId, newText, user, callback) {
 	try {
 		check(newText, 'text').notEmpty();
 	} catch (err) {
@@ -117,23 +118,23 @@ function modTodo(todoId, newText, callback) {
 	}
 	
 	
-	updateOne(todoId, {text: newText}, callback);
+	updateOne(todoId, user, {text: newText}, callback);
 }
 
-function checkTodo(todoId, completed, callback) {
+function checkTodo(todoId, completed, user, callback) {
 	try {
 		check(completed).isBoolean();
 	} catch (err) {
 		return callback(err, null);
 	}
 	
-	updateOne(todoId, {completed: Boolean(completed.toLowerCase() === 'true')}, callback);
+	updateOne(todoId, user, {completed: Boolean(completed.toLowerCase() === 'true')}, callback);
 }
 
 
-function countTodos(callback) {
+function countTodos(user, callback) {
 
-	todoDAO.count(function(err, result) {
+	todoDAO.count(user, function(err, result) {
 		callback(err, "todos counted", result);
 	});
 }
@@ -144,27 +145,26 @@ function find(query, callback) {
 	});
 }
 
-function getAll(callback) {
-	find({}, callback);
+function getAll(user, callback) {
+	find({user: user}, callback);
 }
 
-
-function checkAll(completed, callback) {
+function checkAll(completed, user, callback) {
 	try {
 		check(completed).isBoolean();
 	} catch (err) {
 		return callback(err, null);
 	}
 	
-	var query = {};
+	var query = {user: user};
 	
 	update(query, {completed: Boolean(completed.toLowerCase() === 'true')}, callback);
 }
 
 
-function delChecked(callback) {
+function delChecked(user, callback) {
 	
-	var query = {completed: true};
+	var query = {user: user, completed: true};
 	
 	todoDAO.remove(query, function(err, result) {
 		if (err) {

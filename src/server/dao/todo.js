@@ -61,13 +61,13 @@ Todo.prototype.save = function(todo, callback) {
 };
 
 
-Todo.prototype.get = function(todoId, callback) {
+Todo.prototype.get = function(todoId, user, callback) {
 	mongodb(function(err, db) {
 		if (err) {
 			return callback(err, null);
 		}
 
-		db.collection('todo').findOne({_id: new ObjectID(todoId)}, callback);
+		db.collection('todo').findOne({_id: new ObjectID(todoId), user: user}, callback);
 	});
 };
 
@@ -82,19 +82,18 @@ Todo.prototype.remove = function(query, callback) {
 };
 
 
-Todo.prototype.removeOne = function(todoId, callback) {
-	var query = {_id: new ObjectID(todoId)};
+Todo.prototype.removeOne = function(todoId, user, callback) {
+	var query = {_id: new ObjectID(todoId), user: user};
 	this.remove(query, callback);
 };
 
-Todo.prototype.updateOne = function(todoId, update, callback) {
-
-	mongodb(function(err, db) {
+Todo.prototype.updateOne = function(todoId, user, update, callback) {
+  mongodb(function(err, db) {
 		if (err) {
 			return callback(err, null);
 		}
 
-		var query = {_id: new ObjectID(todoId)};
+		var query = {_id: new ObjectID(todoId), user: user};
 		var sort = null;
 		var options = {
 			new : true, // set to true if you want to return the modified object rather than the original
@@ -132,13 +131,20 @@ Todo.prototype.update = function(query, update, callback) {
 };
 
 
-Todo.prototype.count = function(callback) {
+Todo.prototype.count = function(user, callback) {
 	mongodb(function(err, db) {
 		if (err) {
 			return callback(err, null);
 		}
-
-		db.collection('todo').count(callback);
+    
+    Todo.prototype.find({user: user}, function(err, result) {
+      if (err) {
+       return  callback(err);
+     } else {
+       return  callback(null, result.length);
+     }
+        
+    });
 	});
 };
 

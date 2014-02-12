@@ -1,21 +1,22 @@
 var todoManager = require('../manager/todo'),
-		logger = require('../util/logger')(__filename);
+    sec = require('../middleware/sec'),
+	logger = require('../util/logger')(__filename);
 
 function addServices(app) {
 
-	app.post('/todo', addTodo);
-	app.del('/todo/:id', delTodo);
-	app.get('/todo/:id', getTodo);
-	app.put('/todo/:id', modTodo);
-	app.put('/todo/:id/check/:state', checkTodo);
-	app.get('/todos/count', countTodos);
-	app.get('/todos', getAll);
-	app.put('/todos/check/:state', checkAll);
-	app.del('/todos/checked', delChecked);
+	app.post('/todo', sec.ensureAuthenticated, addTodo);
+	app.del('/todo/:id', sec.ensureAuthenticated, delTodo);
+	app.get('/todo/:id', sec.ensureAuthenticated, getTodo);
+	app.put('/todo/:id', sec.ensureAuthenticated, modTodo);
+	app.put('/todo/:id/check/:state', sec.ensureAuthenticated, checkTodo);
+	app.get('/todos/count', sec.ensureAuthenticated, countTodos);
+	app.get('/todos', sec.ensureAuthenticated, getAll);
+	app.put('/todos/check/:state', sec.ensureAuthenticated, checkAll);
+	app.del('/todos/checked', sec.ensureAuthenticated, delChecked);
 }
 
 function addTodo(req, res) {
-	todoManager.addTodo(req.body.text, function(err, msg, todo) {
+	todoManager.addTodo(req.body.text, req.session.me, function(err, msg, todo) {
 
 		if (err) {
 			logger.error(err);
@@ -33,7 +34,7 @@ function addTodo(req, res) {
 }
 
 function getTodo(req, res) {
-	todoManager.getTodo(req.params.id, function(err, msg, todo) {
+	todoManager.getTodo(req.params.id, req.session.me, function(err, msg, todo) {
 
 		if (err) {
 			logger.error(err);
@@ -51,7 +52,7 @@ function getTodo(req, res) {
 }
 
 function delTodo(req, res) {
-	todoManager.delTodo(req.params.id, function(err, msg) {
+	todoManager.delTodo(req.params.id, req.session.me, function(err, msg) {
 
 		if (err) {
 			logger.error(err);
@@ -68,7 +69,7 @@ function delTodo(req, res) {
 }
 
 function modTodo(req, res) {
-	todoManager.modTodo(req.params.id, req.body.text, function(err, msg, todo) {
+	todoManager.modTodo(req.params.id, req.body.text, req.session.me, function(err, msg, todo) {
 
 		if (err) {
 			logger.error(err);
@@ -86,7 +87,7 @@ function modTodo(req, res) {
 }
 
 function checkTodo(req, res) {
-	todoManager.checkTodo(req.params.id, req.params.state, function(err, msg, todo) {
+	todoManager.checkTodo(req.params.id, req.params.state, req.session.me, function(err, msg, todo) {
 
 		if (err) {
 			logger.error(err);
@@ -104,7 +105,7 @@ function checkTodo(req, res) {
 }
 
 function countTodos(req, res) {
-	todoManager.countTodos(function(err, msg, result) {
+	todoManager.countTodos(req.session.me, function(err, msg, result) {
 
 		if (err) {
 			logger.error(err);
@@ -122,7 +123,7 @@ function countTodos(req, res) {
 }
 
 function getAll(req, res) {
-	todoManager.getAll(function(err, msg, todos) {
+	todoManager.getAll(req.session.me, function(err, msg, todos) {
 
 		if (err) {
 			logger.error(err);
@@ -140,7 +141,7 @@ function getAll(req, res) {
 }
 
 function checkAll(req, res) {
-	todoManager.checkAll(req.params.state, function(err, msg) {
+	todoManager.checkAll(req.params.state, req.session.me, function(err, msg) {
 
 		if (err) {
 			logger.error(err);
@@ -158,7 +159,7 @@ function checkAll(req, res) {
 
 
 function delChecked(req, res) {
-	todoManager.delChecked(function(err, msg) {
+	todoManager.delChecked(req.session.me, function(err, msg) {
 
 		if (err) {
 			logger.error(err);
