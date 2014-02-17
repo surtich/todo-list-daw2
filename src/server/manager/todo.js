@@ -75,7 +75,7 @@ function delTodo(todoId, user, callback) {
 }
 
 
-function updateOne(todoId, user, update,callback) {
+function updateOne(todoId, user, shared, update,callback) {
 	try {
 		check(todoId).ObjectID();
 	} catch (err) {
@@ -84,7 +84,7 @@ function updateOne(todoId, user, update,callback) {
 	
 	update.modifiedDate = new Date();
 	
-	todoDAO.updateOne(todoId, user, update, function(err, todoSaved) {
+	todoDAO.updateOne(todoId, user, shared, update, function(err, todoSaved) {
 		if (err) {
 			return callback(err);
 		}
@@ -118,7 +118,19 @@ function modTodo(todoId, newText, user, callback) {
 	}
 	
 	
-	updateOne(todoId, user, {text: newText}, callback);
+	updateOne(todoId, user, false, {text: newText}, callback);
+}
+
+
+function shareTodo(todoId, usersString, user, callback) {
+  var users;
+  if (usersString) {
+    users = usersString.split(',');
+  } else {
+    users = [];
+  }
+          
+	updateOne(todoId, user, false, {users: users}, callback);
 }
 
 function checkTodo(todoId, completed, user, callback) {
@@ -128,7 +140,7 @@ function checkTodo(todoId, completed, user, callback) {
 		return callback(err, null);
 	}
 	
-	updateOne(todoId, user, {completed: Boolean(completed.toLowerCase() === 'true')}, callback);
+	updateOne(todoId, user, true, {completed: Boolean(completed.toLowerCase() === 'true')}, callback);
 }
 
 
@@ -146,7 +158,7 @@ function find(query, callback) {
 }
 
 function getAll(user, callback) {
-	find({user: user}, callback);
+	find({$or: [{user: user}, {users: {$in: [user]}}]}, callback);
 }
 
 function checkAll(completed, user, callback) {
@@ -156,7 +168,7 @@ function checkAll(completed, user, callback) {
 		return callback(err, null);
 	}
 	
-	var query = {user: user};
+	var query = {$or: [{user: user}, {users: {$in: [user]}}]};
 	
 	update(query, {completed: Boolean(completed.toLowerCase() === 'true')}, callback);
 }
@@ -188,5 +200,6 @@ module.exports = {
 	countTodos: countTodos,
 	getAll: getAll,
 	checkAll: checkAll,
-	delChecked: delChecked
+	delChecked: delChecked,
+  shareTodo: shareTodo
 };

@@ -87,13 +87,18 @@ Todo.prototype.removeOne = function(todoId, user, callback) {
 	this.remove(query, callback);
 };
 
-Todo.prototype.updateOne = function(todoId, user, update, callback) {
+Todo.prototype.updateOne = function(todoId, user, shared, update, callback) {
   mongodb(function(err, db) {
 		if (err) {
 			return callback(err, null);
 		}
 
-		var query = {_id: new ObjectID(todoId), user: user};
+		var query = {_id: new ObjectID(todoId)};
+    if (shared) {
+      query['$or'] = [{user: user}, {users: {$in: [user]}}];
+    } else {
+      query.user = user;
+    }
 		var sort = null;
 		var options = {
 			new : true, // set to true if you want to return the modified object rather than the original

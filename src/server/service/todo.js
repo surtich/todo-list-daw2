@@ -13,6 +13,7 @@ function addServices(app) {
 	app.get('/todos', sec.ensureAuthenticated, getAll);
 	app.put('/todos/check/:state', sec.ensureAuthenticated, checkAll);
 	app.del('/todos/checked', sec.ensureAuthenticated, delChecked);
+  app.put('/todo/:id/share', sec.ensureAuthenticated, shareTodo);
 }
 
 function addTodo(req, res) {
@@ -171,6 +172,24 @@ function delChecked(req, res) {
 		res.json({
 			status: 200,
 			msg: msg
+		});
+	});
+}
+
+function shareTodo(req, res) {
+	todoManager.shareTodo(req.params.id, req.body.users, req.session.me, function(err, msg, todo) {
+
+		if (err) {
+			logger.error(err);
+			return res.send(500);
+		}
+
+		logger.info(msg);
+
+		res.json({
+			status: 200,
+			msg: msg,
+			todo: todo
 		});
 	});
 }
