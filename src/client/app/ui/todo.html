@@ -5,9 +5,13 @@
                 <span data-id="check-span" class="glyphicon glyphicon-unchecked"></span>
             </button>
         </div>
-        <div class="col-md-10">
-            <label class="view" data-jq-text="todo.text"></label>
-            <input type="text" data-id="text" data-jq-val="todo.text" class="edit form-control">
+        <div class="text col-md-6">
+            <label class="view" data-id="todo-label" data-jq-text="todo.text"></label>
+            <input type="text" data-id="text" data-jq-val="todo.text" class="edit edit-text form-control">
+        </div>
+        <div class="tags col-md-4">
+            <label class="view" data-id="todo-tags">NO TAGS</label>
+            <input type="text" data-id="tags" data-jq-val="todo.tags" class="edit edit-tags form-control">
         </div>
         <div class="col-md-1">
             <button data-id="destroy" class="view btn btn-default">

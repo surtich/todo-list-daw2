@@ -97,10 +97,10 @@ Todo.prototype.updateOne = function(todoId, update, callback) {
 		var query = {_id: new ObjectID(todoId)};
 		var sort = null;
 		var options = {
-			new : true, // set to true if you want to return the modified object rather than the original
+			'new': true // set to true if you want to return the modified object rather than the original
 		};
 
-		db.collection('todo').findAndModify(query, sort, {'$set': update}, options, function(err, todoSaved) {
+		db.collection('todo').findAndModify(query, sort, update, options, function(err, todoSaved) {
 			if (err) {
 				return callback(err, null);
 			}

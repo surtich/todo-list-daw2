@@ -19,6 +19,9 @@ iris.screen(function(self) {
 		for (var id in todos) {
 			createTodo(id);
 		}
+        
+        self.ui('tags', iris.path.ui.tags.js);
+        
 		render();
 	}
 

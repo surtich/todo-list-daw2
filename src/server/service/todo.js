@@ -68,7 +68,7 @@ function delTodo(req, res) {
 }
 
 function modTodo(req, res) {
-	todoManager.modTodo(req.params.id, req.body.text, function(err, msg, todo) {
+	todoManager.modTodo(req.params.id, req.body.text, req.body.tags, function(err, msg, todo) {
 
 		if (err) {
 			logger.error(err);

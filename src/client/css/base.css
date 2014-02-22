@@ -39,13 +39,23 @@ body {
 }
 
 
-#todo-list li.editing .edit {
+#todo-list li.editing-text .edit-text, #todo-list li.editing-tags .edit-tags {
   display: block;
 }
 
 #todo-list li.editing .view {
   display: none;
 }
+
+
+#todo-list li.editing-text .tags .view{
+  display: block;
+}
+
+#todo-list li.editing-tags .text .view{
+  display: block;
+}
+
 
 #todo-list li.view label {
   color: #3a87ad;
