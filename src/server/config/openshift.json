@@ -1,0 +1,13 @@
+{
+	"LOGGER" : {
+		"METADATA" : {
+			"project": "todo-list",
+			"env" : "openshift"
+		},
+		"LEVEL" : "info",
+		"CONSOLE_TRANSPORT" : true
+	},
+	"DB" : {
+		"CONN" : "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT" 
+	}
+}

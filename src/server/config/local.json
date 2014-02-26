@@ -1,0 +1,13 @@
+{
+	"LOGGER" : {
+		"METADATA" : {
+			"project": "todo-list",
+			"env" : "local"
+		},
+		"LEVEL" : "info",
+		"CONSOLE_TRANSPORT" : true
+	},
+	"DB" : {
+		"CONN" : "mongodb://127.0.0.1:27017/todo-list?w=1" 
+	}
+}
