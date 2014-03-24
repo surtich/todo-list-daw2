@@ -90,3 +90,17 @@ body {
 #filters li a.selected {
 	font-weight: bold;
 }
+
+#tags li a.selected {
+	border: 2px dotted;
+}
+
+
+@media (max-width: 400px) {
+	#sidebar, .tags {
+		display: none;		
+	}
+	body {
+		font-size: 3em;
+	}
+}

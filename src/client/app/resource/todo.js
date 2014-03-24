@@ -93,21 +93,38 @@ iris.resource(function(self) {
       self.notify('update');
     });
   };
+  
+  function checkTags(tags) {
+	  tags = tags.toLowerCase().split(',');
+	  return tags.every(function(tag, index, array) {
+		  return tag.trim() !== '' && array.indexOf(tag, index + 1) === -1;
+	  });
+  }
 
   self.edit = function(id, text, tags, callback) {
     var todo = todos[id];
     console.log("Modifing a todo");
-    return self.put("todo/" + id, {text: text, tags: tags}).done(function(data) {
-      console.log("Todo modified");
-      todos[id] = data.todo;
-      callback(todo);
-      self.notify('update');
-    });
+	tags = tags.split(',').map(function(tag) {
+		return tag.trim();
+	}).join(',');
+	if (checkTags(tags)) {
+		return self.put("todo/" + id, {text: text, tags: tags}).done(function(data) {
+		  console.log("Todo modified");
+		  todos[id] = data.todo;
+		  callback(null, todo);
+		  self.notify('update');
+		}).fail(function() {callback('error', null);});
+	} else {
+		callback('duplicate tags', null);
+	}
   };
 
   self.setFilter = function(filter) {
-    console.log("Set filter = " + filter);
     currentFilter = filter;
+  };
+  
+  self.getFilter = function() {
+    return currentFilter;
   };
 
   self.count = function() {

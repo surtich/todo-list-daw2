@@ -63,8 +63,14 @@ iris.screen(function(self) {
 			todos.setFilter(filter);
 
 			var $footer = self.get("footer");
+			var $tags = self.get("tags");
 			$(".selected", $footer).removeClass("selected");
-			$("a[href='#;filter=" + filter + "']", $footer).addClass("selected");
+			$(".selected", $tags).removeClass("selected");
+			if (filter.indexOf('tag:') !== 0) {
+				$("a[href='#;filter=" + filter + "']", $footer).addClass("selected");
+			} else {
+				$("a[href='#;filter=" + filter + "']", $tags).addClass("selected");
+			}
 
 			var uis = self.ui("todo-list");
 			for (var i = 0; i < uis.length; i++) {
